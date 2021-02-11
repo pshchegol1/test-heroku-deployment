@@ -1,10 +1,11 @@
 // require dotenv package to read the properties in the .env file.
-// never upload .env file to git.
+// *never upload .env file to git.
 require('dotenv').config()
 //import the express module
 const express = require('express');
 // import the path utils from Node.
 const path = require('path')
+const cors = require('cors')
  
 
 // create an instance of express
@@ -16,7 +17,8 @@ const app = express()
 // never upload to git...
 const PORT =  process.env.PORT || 5000 
 
- 
+// Middleware for Cors Origin Resource Sharing
+app.use(cors())
 
 
 //To get access to the name value pairs send in the message Body of POST Request.
@@ -33,10 +35,23 @@ app.use(express.static(path.join(__dirname, "../client"), {extensions: ["html", 
  
  // Routing Middleware.  
  // login route.
+ // Access from Data that uses the POST method from the req body
+ // Tell express that you want to access POST Request body
+ // Setup app.use(express.urlecoded({extended:true}))
+
  app.post('/login', (req, res)=>{
-   console.log(req.body)
-   res.send("trying to login")
+  
+   // sending data back or files 
+   // res.send()---text or simple markup
+   // res.json() --- send json back
+   // res.sendFile() --- send a file 
+   // res.render() --- send template
+
+   // pass the user email and password to a login servise
+   // read the user file then check the email...
+   res.sendFile(path.join(__dirname, '../client/dashboard.html'))
  })
+
 
 // Final Middleware 
 // Catch all for any request not handled while express was
