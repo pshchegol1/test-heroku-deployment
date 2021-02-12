@@ -19,7 +19,7 @@ const authenticate = (credential) =>{
     //!CONTINUE HERE (FIND IF EMAIL AND PASSWORD MATCH data in user.json)
     users.filter(function(item)
     {
-         console.log(item) 
+         console.log(credential=item) 
     })
 }
 
