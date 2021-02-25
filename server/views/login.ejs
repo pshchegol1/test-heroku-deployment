@@ -11,10 +11,10 @@
     <nav class="navbar">
       <ul >
           <li><a href="index.html">home</a></li>
-          <li><a href="login.html">account login</a></li>
+          <li><a href="login">account login</a></li>
       </ul>
   </nav>
- 
+   
 
     <aside class="app-form">
       <header class="form-header"><h2>Login Form</h2></header>
@@ -22,23 +22,28 @@
       <form id="login" action="/login" method="POST">
         
         <div class="form-control">
-          <label for="email">Account email address <span class="warning">warning</span></label>
+          <label for="email">Account email address 
+            <span class="warning"><%- emailWarning %></span></label>
           <input
             id="email"
             type="text"
             name="email"
             placeholder="account@email.com"
+            value="<%email%> "
           />
      
         </div>
 
         <div class="form-control">
-          <label for="password">Account password <span class="warning">warning</span></label>
+          <label for="password">
+            Account password 
+            <span class="warning"><%- passwordWarning %> </span></label>
           <input
             id="password"
             type="text"
             name="password"
             placeholder="account password "
+            value="<%password%> "
           />
         </div>
 
@@ -47,6 +52,6 @@
         </div>
       </form>
     </aside>
-    <script src="js/login.js"></script>
+    <script src="js/forms.js"></script>
   </body>
 </html>

@@ -14,9 +14,10 @@
   "keywords": [
     "none"
   ],
-  "author": "pavs",
+  "author": "james foley",
   "license": "MIT",
   "dependencies": {
+    "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",

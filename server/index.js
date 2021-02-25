@@ -6,9 +6,11 @@ const express = require('express');
 // import the path utils from Node.
 const path = require('path')
 const cors = require('cors')
+// cookie session
+const cookieSession = require('cookie-session')
+// Importing our Login Service Used With the POST Login Route
+const loginService = require('./services/loginService')
 
-// Importing our loginService
-const loginService = require('./services/loginService');
 
 
 // create an instance of express
@@ -28,12 +30,16 @@ app.use(cors())
  app.use(express.urlencoded({extended:true}))
  app.use(express.json())
 
+ // cookie session setup
+app.use(cookieSession({
+  name:'session',
+  keys:['fgfgfgfgfgf','ddddfffffggggg']
+}))
 
- // setup template Engine
+ // Setup Template Engine
  app.set('view engine', 'ejs')
  app.set('views', path.join(__dirname, './views'))
  
-
 
 //Middleware Serving Static Pages from client directory
 // second parameter is an configuration object of how we want
@@ -49,23 +55,71 @@ app.use(express.static(path.join(__dirname, "../client"), {extensions: ["html", 
  // Tell Express that you want to access POST Request body
  // Setup   app.use(express.urlencoded({extended:true}))
 
-// EJS render
-app.get('/login', (req, res) =>{
-  res.render('login', {title:"Pavs boss"})
-})
+ app.get('/dashboard', (req, res)=>{
+   if(req.session.isValid)
+   {
+     res.render('dashboard')
+   }
+   else
+   {
+     res.sendFile(path.join(__dirname, './client/index.html'))
+   }
+   
+ })
 
+ app.get('/login', (req, res)=>{
+   // user template placed inside the views directory
+   // res.render(view, data)   ejs.render(template, {data})
+   res.render('login', {passwordWarning:"", emailWarning:"", password:"", email:""})
 
+ })
 
  app.post('/login', (req, res)=>{
+   // if your incomming name value pairs are alot then create an object
     const credentials = {
       email:req.body.email,
       password:req.body.password
     }
-    const isValidUser = loginService.authenticate(credentials)
+    const isValidUser =  loginService.authenticate(credentials)
 
-    res.end()
+    if(isValidUser.user !== null)
+    {
+      // cookie session isValid Session
+      if(!req.session.isValid )
+      {
+          req.session.isValid = true
+      }
+      res.redirect('dashboard')
+    }
+
+    if(isValidUser.user === null)
+    {
+      // render the login
+      // isValidUser
+      res.render('login', {
+        emailWarning:isValidUser.emailWarning, 
+        passwordWarning:isValidUser.passwordWarning,
+        email: req.body.email,
+        password: req.body.password
+      })
+    }
     
-   res.sendFile(path.join(__dirname, '../client/dashboard.html'))
+    res.end();
+  })
+    
+ 
+ app.post('/login', (req, res)=>{
+   // POST name value pairs in body request
+   const credentials = {
+     email:req.body.email,
+     password:req.body.password
+    }
+    
+    
+    const isValidUser = loginService.authenticate(credentials)
+   
+    res.end()
+ 
  })
 
  
